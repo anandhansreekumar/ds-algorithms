@@ -15,6 +15,8 @@ strings.splice(2, 0, "alien");
 console.log(strings);
 
 // Lookup - O(1)
-// Push - O(1)
+// Push - O(1) *
 // Insert - O(n)
 // Delete - O(n)
+
+// * Can be O(n) for static arrays
