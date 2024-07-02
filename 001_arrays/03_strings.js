@@ -38,6 +38,3 @@ const mergeSortedArrays = (array1 = [], array2 = []) => {
 
   return mergedArray;
 };
-
-const mergedArray = mergeSortedArrays([1, 3, 4, 31], [4, 6, 30]);
-console.log(mergedArray);
