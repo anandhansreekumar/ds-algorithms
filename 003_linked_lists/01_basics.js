@@ -1,42 +1,49 @@
-// 10 -> 5 -> 16
-// let linkedList = {
-//   head: {
-//     value: 10,
-//     next: {
-//       value: 5,
-//       next: {
-//         value: 16,
-//         next: null,
-//       },
-//     },
-//   },
-// };
-
 class LinkedList {
   constructor(value) {
-    this.head = this.createNode(value, null);
+    const newNode = this.getNewNode(value);
+
+    this.head = newNode;
     this.tail = this.head;
+
     this.length = 1;
   }
 
-  createNode(value, nextNode) {
+  getNewNode(value) {
     return {
       value,
-      next: nextNode,
+      next: null,
     };
   }
 
   append(value) {
-    const newNode = this.createNode(value, null);
+    const newNode = this.getNewNode(value);
+
+    this.tail.next = newNode;
     this.tail = newNode;
-    this.head.next = this.tail;
+
     this.length++;
   }
 
   prepend(value) {
-    const newNode = this.createNode(value, this.head);
+    const newNode = this.getNewNode(value);
+
+    newNode.next = this.head;
     this.head = newNode;
+
     this.length++;
+  }
+
+  printList() {
+    const list = [];
+
+    let currentNode = this.head;
+
+    while (currentNode) {
+      list.push(currentNode.value);
+      currentNode = currentNode.next;
+    }
+
+    return list;
   }
 }
 
@@ -46,3 +53,5 @@ linkedList.append(16);
 linkedList.prepend(1000);
 
 console.log(linkedList);
+
+console.log(linkedList.printList());
