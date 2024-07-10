@@ -33,7 +33,7 @@ class LinkedList {
     this.length++;
   }
 
-  printList() {
+  print() {
     const list = [];
 
     let currentNode = this.head;
@@ -47,14 +47,17 @@ class LinkedList {
   }
 
   insert(index, value) {
+    // Invalid index
+    if (index >= this.length || index < 0) {
+      return this.append(value);
+    }
+
+    // Head
     if (index === 0) {
       return this.prepend(value);
     }
 
-    if (index >= this.length) {
-      return this.append(value);
-    }
-
+    // Other nodes
     const newNode = this._getNewNode(value);
     const leader = this.find(index - 1);
     const holdingPointer = leader.next;
@@ -66,7 +69,8 @@ class LinkedList {
   }
 
   find(index) {
-    if (index >= this.length) {
+    // Invalid index
+    if (index >= this.length || index < 0) {
       return;
     }
 
@@ -80,6 +84,36 @@ class LinkedList {
 
     return currentNode;
   }
+
+  remove(index) {
+    // Invalid index
+    if (index >= this.length || index < 0) {
+      return;
+    }
+
+    // Head
+    if (index === 0) {
+      this.head = this.head.next;
+      this.length--;
+
+      return;
+    }
+
+    // Tail
+    if (index === this.length - 1) {
+      const leader = this.find(this.length - 2);
+      leader.next = null;
+      this.tail = leader;
+      this.length--;
+
+      return;
+    }
+
+    // Other nodes
+    const leader = this.find(index - 1);
+    const unwantedNode = leader.next;
+    leader.next = unwantedNode.next;
+  }
 }
 
 const linkedList = new LinkedList(10);
@@ -88,8 +122,8 @@ linkedList.append(5);
 linkedList.append(16);
 linkedList.prepend(1);
 
-console.log(linkedList.printList());
+console.log(linkedList.print());
 
 linkedList.insert(2, 99);
 
-console.log(linkedList.printList());
+console.log(linkedList.print());
