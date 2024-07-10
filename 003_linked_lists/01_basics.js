@@ -71,7 +71,7 @@ class LinkedList {
   find(index) {
     // Invalid index
     if (index >= this.length || index < 0) {
-      return;
+      return null;
     }
 
     let i = 0;
@@ -113,6 +113,7 @@ class LinkedList {
     const leader = this.find(index - 1);
     const unwantedNode = leader.next;
     leader.next = unwantedNode.next;
+    this.length--;
   }
 }
 
