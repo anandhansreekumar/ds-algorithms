@@ -80,7 +80,7 @@ class LinkedList {
 
     // Head
     if (index === 0) {
-      return prependNode(value);
+      return this.prependNode(value);
     }
 
     // Tail
@@ -96,12 +96,47 @@ class LinkedList {
     leader.next = newNode;
   }
 
-  length() {
-    return this.length;
+  removeNodeAtIndex(index) {
+    // Invalid
+    if (index < 0 || index >= this.length) {
+      return;
+    }
+
+    // 1 item
+    if (this.length === 1) {
+      return this.clear();
+    }
+
+    // Head
+    if (index === 0) {
+      this.head = this.head.next;
+      this.length--;
+
+      return this;
+    }
+
+    // Tail
+    if (index === this.length - 1) {
+      const leader = this.findNodeByIndex(index - 1);
+      leader.next = null;
+      this.tail = leader;
+      this.length--;
+
+      return this;
+    }
+
+    // Non-terminal indices
+    const leader = this.findNodeByIndex(index - 1);
+    leader.next = leader.next.next;
+    this.length--;
+
+    return this;
   }
 
   clear() {
     this.head = null;
+    this.tail = null;
+    this.length = 0;
   }
 }
 
