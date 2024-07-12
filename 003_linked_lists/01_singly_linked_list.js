@@ -46,6 +46,7 @@ class LinkedList {
 
     if (this.length) {
       this.tail.next = newNode;
+      this.tail = newNode;
     } else {
       this.head = newNode;
       this.tail = newNode;
@@ -94,6 +95,9 @@ class LinkedList {
     const holdingPointer = leader.next;
     newNode.next = holdingPointer;
     leader.next = newNode;
+    this.length++;
+
+    return this;
   }
 
   removeNodeAtIndex(index) {
