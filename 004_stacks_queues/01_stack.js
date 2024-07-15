@@ -8,7 +8,6 @@ class ListNode {
 class Stack {
   constructor() {
     this.top = null;
-    this.bottom = null;
     this.length = 0;
   }
 
@@ -24,7 +23,6 @@ class Stack {
       this.top = newNode;
     } else {
       this.top = newNode;
-      this.bottom = this.top;
     }
 
     this.length++;
