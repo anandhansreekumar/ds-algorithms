@@ -38,7 +38,7 @@ class LinkedList {
 
     this.length++;
 
-    return this;
+    return this.listAllNodes();
   }
 
   appendNode(data) {
@@ -54,7 +54,7 @@ class LinkedList {
 
     this.length++;
 
-    return this;
+    return this.listAllNodes();
   }
 
   findNodeByIndex(index) {
@@ -97,7 +97,7 @@ class LinkedList {
     leader.next = newNode;
     this.length++;
 
-    return this;
+    return this.listAllNodes();
   }
 
   removeNodeAtIndex(index) {
@@ -116,7 +116,7 @@ class LinkedList {
       this.head = this.head.next;
       this.length--;
 
-      return this;
+      return this.listAllNodes();
     }
 
     // Tail
@@ -126,7 +126,7 @@ class LinkedList {
       this.tail = leader;
       this.length--;
 
-      return this;
+      return this.listAllNodes();
     }
 
     // Non-terminal indices
@@ -134,13 +134,38 @@ class LinkedList {
     leader.next = leader.next.next;
     this.length--;
 
-    return this;
+    return this.listAllNodes();
   }
 
   clear() {
     this.head = null;
     this.tail = null;
     this.length = 0;
+  }
+
+  reverse() {
+    if (this.length === 1) {
+      return this.listAllNodes();
+    }
+
+    let first = this.head;
+    let second = first.next;
+
+    while (second) {
+      const holdingPointer = second.next;
+
+      second.next = first;
+
+      first = second;
+      second = holdingPointer;
+    }
+
+    const temp = this.head;
+    this.head = this.tail;
+    this.tail = temp;
+    this.tail.next = null;
+
+    return this.listAllNodes();
   }
 }
 
@@ -149,3 +174,11 @@ const ll = new LinkedList();
 ll.prependNode(1);
 ll.prependNode(2);
 ll.prependNode(3);
+
+console.log(ll.listAllNodes());
+ll.reverse();
+console.log(ll.listAllNodes());
+ll.prependNode(12345);
+console.log(ll.listAllNodes());
+ll.reverse();
+console.log(ll.listAllNodes());
