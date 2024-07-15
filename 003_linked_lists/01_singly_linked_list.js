@@ -169,16 +169,121 @@ class LinkedList {
   }
 }
 
-const ll = new LinkedList();
+/**
+ * Tests
+ */
 
-ll.prependNode(1);
-ll.prependNode(2);
-ll.prependNode(3);
+const assertEquals = (actual, expected, message) => {
+  const actualString = JSON.stringify(actual);
+  const expectedString = JSON.stringify(expected);
 
-console.log(ll.listAllNodes());
-ll.reverse();
-console.log(ll.listAllNodes());
-ll.prependNode(12345);
-console.log(ll.listAllNodes());
-ll.reverse();
-console.log(ll.listAllNodes());
+  if (actualString !== expectedString) {
+    console.error(`Test failed: ${message}`);
+    console.error(`Expected: ${expectedString}`);
+    console.error(`Actual: ${actualString}`);
+  } else {
+    console.log(`Test passed: ${message}`);
+  }
+};
+
+// Test LinkedList class
+(function () {
+  const ll = new LinkedList();
+
+  // Test prependNode
+  assertEquals(ll.prependNode(1), [1], "prependNode should add 1 to the list");
+  assertEquals(
+    ll.prependNode(2),
+    [2, 1],
+    "prependNode should add 2 to the beginning of the list"
+  );
+  assertEquals(
+    ll.prependNode(3),
+    [3, 2, 1],
+    "prependNode should add 3 to the beginning of the list"
+  );
+
+  // Test listAllNodes
+  assertEquals(
+    ll.listAllNodes(),
+    [3, 2, 1],
+    "listAllNodes should return [3, 2, 1]"
+  );
+
+  // Test appendNode
+  assertEquals(
+    ll.appendNode(4),
+    [3, 2, 1, 4],
+    "appendNode should add 4 to the end of the list"
+  );
+
+  // Test findNodeByIndex
+  assertEquals(
+    ll.findNodeByIndex(0).data,
+    3,
+    "findNodeByIndex(0) should return node with data 3"
+  );
+  assertEquals(
+    ll.findNodeByIndex(2).data,
+    1,
+    "findNodeByIndex(2) should return node with data 1"
+  );
+  assertEquals(
+    ll.findNodeByIndex(4),
+    null,
+    "findNodeByIndex(4) should return null"
+  );
+
+  // Test addNodeAtIndex
+  assertEquals(
+    ll.addNodeAtIndex(2, 5),
+    [3, 2, 5, 1, 4],
+    "addNodeAtIndex should add 5 at index 2"
+  );
+
+  // Test removeNodeAtIndex
+  assertEquals(
+    ll.removeNodeAtIndex(2),
+    [3, 2, 1, 4],
+    "removeNodeAtIndex should remove node at index 2"
+  );
+
+  // Test reverse
+  assertEquals(ll.reverse(), [4, 1, 2, 3], "reverse should reverse the list");
+
+  // Test clear
+  ll.clear();
+  assertEquals(ll.listAllNodes(), [], "clear should empty the list");
+
+  // Test edge cases
+  ll.appendNode(1);
+  assertEquals(
+    ll.reverse(),
+    [1],
+    "reverse on a single-node list should return the same list"
+  );
+
+  ll.clear();
+  assertEquals(
+    ll.listAllNodes(),
+    [],
+    "listAllNodes should return [] for an empty list"
+  );
+  assertEquals(
+    ll.removeNodeAtIndex(0),
+    undefined,
+    "removeNodeAtIndex on empty list should return undefined"
+  );
+  assertEquals(
+    ll.addNodeAtIndex(0, 1),
+    undefined,
+    "addNodeAtIndex on empty list should return undefined"
+  );
+  assertEquals(
+    ll.findNodeByIndex(0),
+    null,
+    "findNodeByIndex on empty list should return null"
+  );
+
+  console.log("--All tests completed --");
+})();
