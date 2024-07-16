@@ -11,7 +11,7 @@ class LinkedList {
   }
 
   push(value) {
-    let newNode = new LNode(value);
+    const newNode = new LNode(value);
 
     newNode.next = this.top;
     this.top = newNode;

@@ -12,7 +12,7 @@ class Queue {
   }
 
   enqueue(value) {
-    let newNode = new QNode(value);
+    const newNode = new QNode(value);
 
     if (this.isEmpty()) {
       this.rear = newNode;
