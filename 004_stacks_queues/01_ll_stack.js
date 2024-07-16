@@ -1,48 +1,36 @@
-class ListNode {
-  constructor(data) {
-    this.data = data;
+class LNode {
+  constructor(value) {
+    this.value = value;
     this.next = null;
   }
 }
 
-class Stack {
+class LinkedList {
   constructor() {
     this.top = null;
-    this.length = 0;
+  }
+
+  push(value) {
+    let newNode = new LNode(value);
+
+    newNode.next = this.top;
+    this.top = newNode;
+  }
+
+  isEmpty() {
+    return this.top === null;
   }
 
   peek() {
     return this.top;
   }
 
-  push(value) {
-    const newNode = new ListNode(value);
-
-    if (this.top) {
-      newNode.next = this.top;
-      this.top = newNode;
-    } else {
-      this.top = newNode;
-    }
-
-    this.length++;
-
-    return this;
-  }
-
   pop() {
-    if (!this.top) {
+    if (this.isEmpty()) {
       return;
     }
 
     this.top = this.top.next;
-    this.length--;
-
-    return this;
-  }
-
-  isEmpty() {
-    return !!this.top;
   }
 
   listItems() {
@@ -51,7 +39,7 @@ class Stack {
     let currentNode = this.top;
 
     while (currentNode) {
-      items.push(currentNode.data);
+      items.push(currentNode.value);
       currentNode = currentNode.next;
     }
 
@@ -59,12 +47,16 @@ class Stack {
   }
 }
 
-const myStack = new Stack();
+const ll = new LinkedList();
 
-myStack.push(1);
-myStack.push(2);
-myStack.push(3);
-console.log(myStack.listItems());
-myStack.pop();
-myStack.pop();
-console.log(myStack.listItems());
+ll.push(11);
+ll.push(22);
+ll.push(33);
+ll.push(44);
+
+ll.peek();
+
+ll.pop();
+ll.pop();
+
+console.log(ll.listItems());
