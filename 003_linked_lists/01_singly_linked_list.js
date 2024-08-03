@@ -1,70 +1,64 @@
-class ListNode {
-  constructor(data) {
-    this.data = data;
+class LinkedListNode {
+  constructor(value) {
+    this.value = value;
     this.next = null;
   }
 }
 
 class LinkedList {
   constructor() {
-    this.head = null;
-    this.tail = null;
-    this.length = 0;
+    this._head = null;
+    this._size = 0;
   }
 
-  listAllNodes() {
+  getList() {
+    let currentNode = this._head;
+
     const items = [];
 
-    let currentNode = this.head;
-
     while (currentNode) {
-      items.push(currentNode.data);
+      items.push(currentNode.value);
       currentNode = currentNode.next;
     }
 
     return items;
   }
 
-  prependNode(data) {
-    const newNode = new ListNode(data);
+  append(value) {
+    const newNode = new LinkedList(value);
 
-    if (this.length) {
-      newNode.next = this.head;
-      this.head = newNode;
+    let currentNode = this._head;
+
+    if (currentNode === null) {
+      this._head = newNode;
     } else {
-      this.head = newNode;
-      this.tail = newNode;
+      while (currentNode.next) {
+        currentNode = currentNode.next;
+      }
+
+      currentNode.next = newNode;
     }
 
-    this.length++;
-
-    return this.listAllNodes();
+    this._size++;
   }
 
-  appendNode(data) {
-    const newNode = new ListNode(data);
+  prepend(value) {
+    const newNode = new LinkedListNode(value);
 
-    if (this.length) {
-      this.tail.next = newNode;
-      this.tail = newNode;
-    } else {
-      this.head = newNode;
-      this.tail = newNode;
-    }
+    newNode.next = this._head;
+    this._head = newNode;
 
-    this.length++;
-
-    return this.listAllNodes();
+    this._size++;
   }
 
-  findNodeByIndex(index) {
-    if (index < 0 || index >= this.length) {
-      return null;
+  findNode(index) {
+    if (index < 0 || index >= this._size) {
+      throw new Error("Invalid index provided");
     }
+
+    let currentNode = this._head;
 
     let i = 0;
-    let currentNode = this.head;
-
     while (i < index) {
       currentNode = currentNode.next;
       i++;
@@ -73,217 +67,72 @@ class LinkedList {
     return currentNode;
   }
 
-  addNodeAtIndex(index, value) {
-    // Invalid
-    if (index < 0 || index >= this.length) {
-      return;
+  insertAt(index, value) {
+    const newNode = new LinkedListNode(value);
+
+    if (index < 0 || index >= this._size) {
+      throw new Error("Invalid index provided");
     }
 
-    // Head
     if (index === 0) {
-      return this.prependNode(value);
+      this.prepend(value);
+    } else {
+      const prevNode = this.findNode(index - 1);
+
+      const temp = prevNode.next;
+      prevNode.next = newNode;
+      newNode.next = temp;
+
+      this._size++;
     }
-
-    // Tail
-    if (index === this.length - 1) {
-      return this.appendNode(value);
-    }
-
-    const newNode = new ListNode(value);
-
-    const leader = this.findNodeByIndex(index - 1);
-    const holdingPointer = leader.next;
-    newNode.next = holdingPointer;
-    leader.next = newNode;
-    this.length++;
-
-    return this.listAllNodes();
-  }
-
-  removeNodeAtIndex(index) {
-    // Invalid
-    if (index < 0 || index >= this.length) {
-      return;
-    }
-
-    // 1 item
-    if (this.length === 1) {
-      return this.clear();
-    }
-
-    // Head
-    if (index === 0) {
-      this.head = this.head.next;
-      this.length--;
-
-      return this.listAllNodes();
-    }
-
-    // Tail
-    if (index === this.length - 1) {
-      const leader = this.findNodeByIndex(index - 1);
-      leader.next = null;
-      this.tail = leader;
-      this.length--;
-
-      return this.listAllNodes();
-    }
-
-    // Non-terminal indices
-    const leader = this.findNodeByIndex(index - 1);
-    leader.next = leader.next.next;
-    this.length--;
-
-    return this.listAllNodes();
-  }
-
-  clear() {
-    this.head = null;
-    this.tail = null;
-    this.length = 0;
   }
 
   reverse() {
-    if (this.length === 1) {
-      return this.listAllNodes();
+    if (this._size === 0 || this._size === 1) {
+      return;
     }
 
-    let first = this.head;
-    let second = first.next;
+    let prevNode = this._head;
+    let nextNode = prevNode.next;
 
-    while (second) {
-      const holdingPointer = second.next;
+    prevNode.next = null;
 
-      second.next = first;
+    while (nextNode) {
+      const tempNode = nextNode.next;
+      nextNode.next = prevNode;
 
-      first = second;
-      second = holdingPointer;
+      prevNode = nextNode;
+      nextNode = tempNode;
     }
 
-    const temp = this.head;
-    this.head = this.tail;
-    this.tail = temp;
-    this.tail.next = null;
+    this._head = prevNode;
+  }
 
-    return this.listAllNodes();
+  size() {
+    return this._size;
+  }
+
+  isEmpty() {
+    return this._size === 0;
+  }
+
+  clear() {
+    this._head = null;
+    this._size = 0;
   }
 }
 
-/**
- * Tests
- */
+const ll = new LinkedList();
 
-const assertEquals = (actual, expected, message) => {
-  const actualString = JSON.stringify(actual);
-  const expectedString = JSON.stringify(expected);
+ll.prepend(1);
+ll.prepend(2);
 
-  if (actualString !== expectedString) {
-    console.error(`Test failed: ${message}`);
-    console.error(`Expected: ${expectedString}`);
-    console.error(`Actual: ${actualString}`);
-  } else {
-    console.log(`Test passed: ${message}`);
-  }
-};
+console.log(ll.getList());
 
-// Test LinkedList class
-(function () {
-  const ll = new LinkedList();
+ll.reverse();
 
-  // Test prependNode
-  assertEquals(ll.prependNode(1), [1], "prependNode should add 1 to the list");
-  assertEquals(
-    ll.prependNode(2),
-    [2, 1],
-    "prependNode should add 2 to the beginning of the list"
-  );
-  assertEquals(
-    ll.prependNode(3),
-    [3, 2, 1],
-    "prependNode should add 3 to the beginning of the list"
-  );
+console.log(ll.getList());
 
-  // Test listAllNodes
-  assertEquals(
-    ll.listAllNodes(),
-    [3, 2, 1],
-    "listAllNodes should return [3, 2, 1]"
-  );
+ll.clear();
 
-  // Test appendNode
-  assertEquals(
-    ll.appendNode(4),
-    [3, 2, 1, 4],
-    "appendNode should add 4 to the end of the list"
-  );
-
-  // Test findNodeByIndex
-  assertEquals(
-    ll.findNodeByIndex(0).data,
-    3,
-    "findNodeByIndex(0) should return node with data 3"
-  );
-  assertEquals(
-    ll.findNodeByIndex(2).data,
-    1,
-    "findNodeByIndex(2) should return node with data 1"
-  );
-  assertEquals(
-    ll.findNodeByIndex(4),
-    null,
-    "findNodeByIndex(4) should return null"
-  );
-
-  // Test addNodeAtIndex
-  assertEquals(
-    ll.addNodeAtIndex(2, 5),
-    [3, 2, 5, 1, 4],
-    "addNodeAtIndex should add 5 at index 2"
-  );
-
-  // Test removeNodeAtIndex
-  assertEquals(
-    ll.removeNodeAtIndex(2),
-    [3, 2, 1, 4],
-    "removeNodeAtIndex should remove node at index 2"
-  );
-
-  // Test reverse
-  assertEquals(ll.reverse(), [4, 1, 2, 3], "reverse should reverse the list");
-
-  // Test clear
-  ll.clear();
-  assertEquals(ll.listAllNodes(), [], "clear should empty the list");
-
-  // Test edge cases
-  ll.appendNode(1);
-  assertEquals(
-    ll.reverse(),
-    [1],
-    "reverse on a single-node list should return the same list"
-  );
-
-  ll.clear();
-  assertEquals(
-    ll.listAllNodes(),
-    [],
-    "listAllNodes should return [] for an empty list"
-  );
-  assertEquals(
-    ll.removeNodeAtIndex(0),
-    undefined,
-    "removeNodeAtIndex on empty list should return undefined"
-  );
-  assertEquals(
-    ll.addNodeAtIndex(0, 1),
-    undefined,
-    "addNodeAtIndex on empty list should return undefined"
-  );
-  assertEquals(
-    ll.findNodeByIndex(0),
-    null,
-    "findNodeByIndex on empty list should return null"
-  );
-
-  console.log("--All tests completed --");
-})();
+console.log(ll.getList());
